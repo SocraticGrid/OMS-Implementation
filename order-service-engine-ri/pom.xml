@@ -1,0 +1,359 @@
+
+<!--
+Copyright 2015 Cognitive Medical Systems, Inc (http://www.cognitivemedciine.com).
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.socraticgrid.hl7</groupId>
+        <artifactId>oms-implementation-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent> 
+
+    <artifactId>oms-implementation-service-engine-ri</artifactId>
+    <packaging>jar</packaging>
+    
+    <name>OMS :: Implementation :: Service Engine</name>
+
+    <properties>
+        <local.repo.basedir>${project.basedir}/..</local.repo.basedir>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>integration-tests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            
+            <dependencies>
+                <dependency>
+                    <groupId>exist</groupId>
+                    <artifactId>exist</artifactId>
+                </dependency>
+            </dependencies>
+            
+            <build>
+                <plugins>
+                    <!-- Integration Test Support -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>add-it-source</id>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/it/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-it-resource</id>
+                                <goals>
+                                    <goal>add-test-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <resources>
+                                        <resource>
+                                            <directory>order-service-engine-ri/src/it/resources</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.16</version>
+                        <configuration>
+                            <!--- Not used <junitArtifactName>org.junit.:com.springsource.org.junit</junitArtifactName> -->
+                            <systemProperties>
+                                <property>
+                                    <name>java.util.logging.config.file</name>
+                                    <value>order-service-engine-ri/src/it/resources/log4j.properties</value>
+                                </property>
+                            </systemProperties>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>verify</id>
+                                <goals>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        
+        <!-- OMS -->
+        <dependency>
+            <groupId>org.socraticgrid.hl7</groupId>
+            <artifactId>oms-api</artifactId>
+        </dependency>
+        
+        <!-- Internal -->
+        <dependency>
+            <groupId>org.socraticgrid.hl7</groupId>
+            <artifactId>oms-implementation-fulfillment-library</artifactId>
+        </dependency>
+        
+
+        <!-- Test Artifacts -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <!-- SLF4J - Log4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- SPRING -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+
+        <!-- Spring ORM -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+
+        <!-- Apache Commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
+
+        <!-- Exist DB Dependencies -->
+        <dependency>
+            <groupId>exist</groupId>
+            <artifactId>exist-xmldb</artifactId>
+        </dependency>
+        
+    </dependencies>
+
+    <build>
+        <finalName>OrderService</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-java2ws-plugin</artifactId>
+                <version>${cxf.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                        <version>${cxf.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-rt-frontend-simple</artifactId>
+                        <version>${cxf.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>OrderManagementService</id>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <className>org.socraticgrid.hl7.services.orders.OrderManagementService</className>
+                            <genWsdl>true</genWsdl>
+                            <verbose>true</verbose>
+                            <attachWsdl>true</attachWsdl>
+                            <classifier>OrderManagementService</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>java2ws</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>OrderWorkflowService</id>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <className>org.socraticgrid.hl7.services.orders.OrderWorkflowService</className>
+                            <genWsdl>true</genWsdl>
+                            <verbose>true</verbose>
+                            <attachWsdl>true</attachWsdl>
+                            <classifier>OrderWorkflowService</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>java2ws</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>FulfillmentUpdateService</id>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <className>org.socraticgrid.hl7.services.orders.FulfillmentUpdateService</className>
+                            <genWsdl>true</genWsdl>
+                            <verbose>true</verbose>
+                            <attachWsdl>true</attachWsdl>
+                            <classifier>FulfillmentUpdateService</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>java2ws</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>OrderMonitoringService</id>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <className>org.socraticgrid.hl7.services.orders.OrderMonitoringService</className>
+                            <genWsdl>true</genWsdl>
+                            <verbose>true</verbose>
+                            <attachWsdl>true</attachWsdl>
+                            <classifier>OrderMonitoringService</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>java2ws</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>OrderCatalogQueryService</id>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <className>org.socraticgrid.hl7.services.orders.OrderCatalogQueryService</className>
+                            <genWsdl>true</genWsdl>
+                            <verbose>true</verbose>
+                            <attachWsdl>true</attachWsdl>
+                            <classifier>OrderCatalogQueryService</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>java2ws</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.16</version>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>java.util.logging.config.file</name>
+                            <value>order-service-engine-ri/src/test/resources/log4j.properties</value>
+                        </property>
+                    </systemProperties>
+                    <!-- <parallel>methods</parallel> <threadCount>10</threadCount> -->
+                    <excludes>
+                        <exclude>**/IT*.java</exclude>
+                        <exclude>**/*IT.java</exclude>
+                        <exclude>**/*ITCase.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings 
+                only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.apache.cxf
+                                        </groupId>
+                                        <artifactId>
+                                            cxf-java2ws-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [2.7.7,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>java2ws</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute></execute>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+
+</project>

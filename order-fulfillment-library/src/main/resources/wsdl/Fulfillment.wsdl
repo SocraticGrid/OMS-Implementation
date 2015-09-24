@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="FulfillmentServiceService" targetNamespace="org.socraticgrid.hl7.services.orders.clients" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="org.socraticgrid.hl7.services.orders.clients" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:tns="org.socraticgrid.hl7.services.orders.clients" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="org.socraticgrid.hl7.services.orders.clients">
+  <xs:element name="cancelOrder" type="tns:cancelOrder"/>
+  <xs:element name="cancelOrderResponse" type="tns:cancelOrderResponse"/>
+  <xs:element name="getProposedOrderReplacement" type="tns:getProposedOrderReplacement"/>
+  <xs:element name="getProposedOrderReplacementResponse" type="tns:getProposedOrderReplacementResponse"/>
+  <xs:element name="getResultAgumentatons" type="tns:getResultAgumentatons"/>
+  <xs:element name="getResultAgumentatonsResponse" type="tns:getResultAgumentatonsResponse"/>
+  <xs:element name="identifier" type="tns:identifier"/>
+  <xs:element name="period" type="tns:period"/>
+  <xs:element name="requestFulfillment" type="tns:requestFulfillment"/>
+  <xs:element name="requestFulfillmentResponse" type="tns:requestFulfillmentResponse"/>
+  <xs:element name="retrieveResultByOrderId" type="tns:retrieveResultByOrderId"/>
+  <xs:element name="retrieveResultByOrderIdResponse" type="tns:retrieveResultByOrderIdResponse"/>
+  <xs:element name="retrieveResultByResultId" type="tns:retrieveResultByResultId"/>
+  <xs:element name="retrieveResultByResultIdResponse" type="tns:retrieveResultByResultIdResponse"/>
+  <xs:element name="updateOrderRequirements" type="tns:updateOrderRequirements"/>
+  <xs:element name="updateOrderRequirementsResponse" type="tns:updateOrderRequirementsResponse"/>
+  <xs:element name="verifyOrderRequirement" type="tns:verifyOrderRequirement"/>
+  <xs:element name="verifyOrderRequirementResponse" type="tns:verifyOrderRequirementResponse"/>
+  <xs:complexType name="cancelOrder">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="orderId" type="tns:identifier"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="identifier">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="label" type="xs:string"/>
+      <xs:element minOccurs="0" name="period" type="tns:period"/>
+      <xs:element minOccurs="0" name="system" type="xs:string"/>
+      <xs:element minOccurs="0" name="use" type="xs:string"/>
+      <xs:element minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="period">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="end" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="start" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cancelOrderResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:cancellationStatus"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getProposedOrderReplacement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="orderId" type="tns:identifier"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getProposedOrderReplacementResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:orderModel"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="orderModel">
+    <xs:sequence>
+      <xs:choice minOccurs="0">
+        <xs:element name="lab" type="tns:labOrder"/>
+        <xs:element name="medication" type="tns:medicationOrder"/>
+        <xs:element name="nursing" type="tns:nursingOrder"/>
+        <xs:element name="nutrition" type="tns:nutritionOrder"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="labOrder">
+    <xs:complexContent>
+      <xs:extension base="tns:order">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ordereditems" nillable="true" type="tns:labOrderItem"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType abstract="true" name="order">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="orderEnteredBy" type="tns:identifier"/>
+      <xs:element minOccurs="0" name="orderIdentity" type="tns:identifier"/>
+      <xs:element minOccurs="0" name="orderTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="orderedBy" type="tns:clinicalPractitioner"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="provenance" nillable="true" type="tns:provenance"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="requirements" nillable="true" type="xs:anyType"/>
+      <xs:element minOccurs="0" name="status" type="tns:code"/>
+      <xs:element minOccurs="0" name="subjectdetails" type="tns:subjectModel"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="labOrderItem">
+    <xs:complexContent>
+      <xs:extension base="tns:orderItem">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType abstract="true" name="orderItem">
+    <xs:sequence>
+      <xs:element name="type" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="clinicalPractitioner">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="tns:identifier"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="provenance">
+    <xs:sequence>
+      <xs:element name="type" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="collectionRequirement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="orignator" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:requirementStatusCode"/>
+      <xs:element minOccurs="0" name="type" type="tns:requirementType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="counsellingRequirement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="orignator" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:requirementStatusCode"/>
+      <xs:element minOccurs="0" name="type" type="tns:requirementType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="endorsementRequirement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="orignator" type="xs:string"/>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="key" type="xs:anyType"/>
+                  <xs:element minOccurs="0" name="value" type="xs:anyType"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="scheme" type="xs:string"/>
+      <xs:element minOccurs="0" name="seed" type="xs:string"/>
+      <xs:element minOccurs="0" name="signature" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:requirementStatusCode"/>
+      <xs:element minOccurs="0" name="type" type="tns:requirementType"/>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="proceduralRequirement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="orignator" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:requirementStatusCode"/>
+      <xs:element minOccurs="0" name="type" type="tns:requirementType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="presenceRequirement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="orignator" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:requirementStatusCode"/>
+      <xs:element minOccurs="0" name="type" type="tns:requirementType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="code">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+      <xs:element minOccurs="0" name="codeSystem" type="xs:string"/>
+      <xs:element minOccurs="0" name="label" type="xs:string"/>
+      <xs:element minOccurs="0" name="text" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="subjectModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="patient" type="tns:patient"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="patient">
+    <xs:complexContent>
+      <xs:extension base="tns:subject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="dateOfBirth" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="gender" type="tns:code"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="suplementalIdentifiers" nillable="true" type="tns:identifier"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType abstract="true" name="subject">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identity" type="tns:identifier"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="medicationOrder">
+    <xs:complexContent>
+      <xs:extension base="tns:order">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ordereditems" nillable="true" type="tns:medicationOrderItem"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="medicationOrderItem">
+    <xs:complexContent>
+      <xs:extension base="tns:orderItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="additionalDosageIntructions" type="xs:string"/>
+          <xs:element minOccurs="0" name="comment" type="xs:string"/>
+          <xs:element minOccurs="0" name="dispenseQuantity" type="tns:quantity"/>
+          <xs:element minOccurs="0" name="dosageInstructions" type="xs:string"/>
+          <xs:element minOccurs="0" name="dosageMethod" type="tns:code"/>
+          <xs:element minOccurs="0" name="dosageQuantity" type="tns:quantity"/>
+          <xs:element minOccurs="0" name="dosageRate" type="tns:ratio"/>
+          <xs:element minOccurs="0" name="dosageSite" type="tns:code"/>
+          <xs:element minOccurs="0" name="dosageTiming" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="dosageTimingPeriod" type="tns:period"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="drug" nillable="true" type="tns:identifier"/>
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="expectedSupplyDuration" type="tns:quantity"/>
+          <xs:element minOccurs="0" name="maxDosePerPeriod" type="tns:ratio"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="medication" nillable="true" type="tns:identifier"/>
+          <xs:element name="numberOfRepeatsAllowed" type="xs:int"/>
+          <xs:element minOccurs="0" name="prescriber" type="tns:code"/>
+          <xs:element minOccurs="0" name="route" type="tns:code"/>
+          <xs:element minOccurs="0" name="schedule" type="xs:string"/>
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="quantity">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+      <xs:element minOccurs="0" name="comparator" type="xs:string"/>
+      <xs:element minOccurs="0" name="system" type="xs:string"/>
+      <xs:element minOccurs="0" name="units" type="xs:string"/>
+      <xs:element minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ratio">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="demoninator" type="tns:quantity"/>
+      <xs:element minOccurs="0" name="numerator" type="tns:quantity"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="nursingOrder">
+    <xs:complexContent>
+      <xs:extension base="tns:order">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ordereditems" nillable="true" type="tns:nursingOrderItem"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="nursingOrderItem">
+    <xs:complexContent>
+      <xs:extension base="tns:orderItem">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="nutritionOrder">
+    <xs:complexContent>
+      <xs:extension base="tns:order">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ordereditems" nillable="true" type="tns:nutritionOrderItem"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="nutritionOrderItem">
+    <xs:complexContent>
+      <xs:extension base="tns:orderItem">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="getResultAgumentatons">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resultId" type="tns:identifier"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getResultAgumentatonsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:resultAgumentation"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultAgumentation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="agumeentationWSource" type="xs:string"/>
+      <xs:element minOccurs="0" name="augmentationType" type="tns:code"/>
+      <xs:element minOccurs="0" name="detailtext" type="xs:string"/>
+      <xs:element minOccurs="0" name="summaryText" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="retrieveResultByOrderId">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="orderId" type="tns:identifier"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="retrieveResultByOrderIdResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:result"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="result">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="agumentations" nillable="true" type="tns:resultAgumentation"/>
+      <xs:element minOccurs="0" name="fulfillmentIdentity" type="tns:identifier"/>
+      <xs:element minOccurs="0" name="orderIdentity" type="tns:identifier"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="orderedItems" nillable="true" type="tns:orderItem"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="promisedItems" nillable="true" type="tns:orderItem"/>
+      <xs:element minOccurs="0" name="promisesIdentity" type="tns:identifier"/>
+      <xs:element minOccurs="0" name="resultDetail" type="tns:resultDetail"/>
+      <xs:element minOccurs="0" name="resultIdentity" type="tns:identifier"/>
+      <xs:element minOccurs="0" name="status" type="tns:code"/>
+      <xs:element minOccurs="0" name="subjectIdentity" type="tns:subject"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="descriptive" type="xs:string"/>
+      <xs:element minOccurs="0" name="qualitativeMeasurement" type="tns:code"/>
+      <xs:element minOccurs="0" name="quantitativeMeasurement" type="tns:quantity"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="retrieveResultByResultId">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resultId" type="tns:identifier"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="retrieveResultByResultIdResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:result"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="updateOrderRequirements">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="orderId" type="tns:identifier"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="requirements" type="xs:anyType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="updateOrderRequirementsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:promise"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="promise">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="fulfillmentIdentity" type="tns:identifier"/>
+      <xs:element minOccurs="0" name="orderIdentity" type="tns:identifier"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="orderedItems" nillable="true" type="tns:orderItem"/>
+      <xs:element minOccurs="0" name="promiseIdentity" type="tns:identifier"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="promisedItems" nillable="true" type="tns:orderItem"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="requirements" nillable="true" type="xs:anyType"/>
+      <xs:element minOccurs="0" name="status" type="tns:code"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="verifyOrderRequirement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="orderId" type="tns:identifier"/>
+      <xs:element minOccurs="0" name="requirement" type="xs:anyType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="verifyOrderRequirementResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:verifyStatus"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestFulfillment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="order" type="tns:orderModel"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestFulfillmentResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:promise"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="cancellationStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Sucessful"/>
+      <xs:enumeration value="Retracted"/>
+      <xs:enumeration value="AlreadyComplete"/>
+      <xs:enumeration value="NotAllowed"/>
+      <xs:enumeration value="Failed"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="requirementStatusCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Pending"/>
+      <xs:enumeration value="Complete"/>
+      <xs:enumeration value="Removed"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="requirementType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown"/>
+      <xs:enumeration value="Endorsement"/>
+      <xs:enumeration value="Collection"/>
+      <xs:enumeration value="Counselling"/>
+      <xs:enumeration value="Presence"/>
+      <xs:enumeration value="Procedural"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="verifyStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Valid"/>
+      <xs:enumeration value="Invalid"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="OrderingException" type="tns:OrderingException"/>
+  <xs:complexType name="OrderingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="updateOrderRequirementsResponse">
+    <wsdl:part name="parameters" element="tns:updateOrderRequirementsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="requestFulfillmentResponse">
+    <wsdl:part name="parameters" element="tns:requestFulfillmentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResultAgumentatonsResponse">
+    <wsdl:part name="parameters" element="tns:getResultAgumentatonsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProposedOrderReplacement">
+    <wsdl:part name="parameters" element="tns:getProposedOrderReplacement">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveResultByResultId">
+    <wsdl:part name="parameters" element="tns:retrieveResultByResultId">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateOrderRequirements">
+    <wsdl:part name="parameters" element="tns:updateOrderRequirements">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifyOrderRequirement">
+    <wsdl:part name="parameters" element="tns:verifyOrderRequirement">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifyOrderRequirementResponse">
+    <wsdl:part name="parameters" element="tns:verifyOrderRequirementResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="requestFulfillment">
+    <wsdl:part name="parameters" element="tns:requestFulfillment">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelOrderResponse">
+    <wsdl:part name="parameters" element="tns:cancelOrderResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelOrder">
+    <wsdl:part name="parameters" element="tns:cancelOrder">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProposedOrderReplacementResponse">
+    <wsdl:part name="parameters" element="tns:getProposedOrderReplacementResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="OrderingException">
+    <wsdl:part name="OrderingException" element="tns:OrderingException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveResultByOrderIdResponse">
+    <wsdl:part name="parameters" element="tns:retrieveResultByOrderIdResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResultAgumentatons">
+    <wsdl:part name="parameters" element="tns:getResultAgumentatons">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveResultByOrderId">
+    <wsdl:part name="parameters" element="tns:retrieveResultByOrderId">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveResultByResultIdResponse">
+    <wsdl:part name="parameters" element="tns:retrieveResultByResultIdResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Fulfillment">
+    <wsdl:operation name="cancelOrder">
+      <wsdl:input name="cancelOrder" message="tns:cancelOrder">
+    </wsdl:input>
+      <wsdl:output name="cancelOrderResponse" message="tns:cancelOrderResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProposedOrderReplacement">
+      <wsdl:input name="getProposedOrderReplacement" message="tns:getProposedOrderReplacement">
+    </wsdl:input>
+      <wsdl:output name="getProposedOrderReplacementResponse" message="tns:getProposedOrderReplacementResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResultAgumentatons">
+      <wsdl:input name="getResultAgumentatons" message="tns:getResultAgumentatons">
+    </wsdl:input>
+      <wsdl:output name="getResultAgumentatonsResponse" message="tns:getResultAgumentatonsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveResultByOrderId">
+      <wsdl:input name="retrieveResultByOrderId" message="tns:retrieveResultByOrderId">
+    </wsdl:input>
+      <wsdl:output name="retrieveResultByOrderIdResponse" message="tns:retrieveResultByOrderIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveResultByResultId">
+      <wsdl:input name="retrieveResultByResultId" message="tns:retrieveResultByResultId">
+    </wsdl:input>
+      <wsdl:output name="retrieveResultByResultIdResponse" message="tns:retrieveResultByResultIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrderRequirements">
+      <wsdl:input name="updateOrderRequirements" message="tns:updateOrderRequirements">
+    </wsdl:input>
+      <wsdl:output name="updateOrderRequirementsResponse" message="tns:updateOrderRequirementsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verifyOrderRequirement">
+      <wsdl:input name="verifyOrderRequirement" message="tns:verifyOrderRequirement">
+    </wsdl:input>
+      <wsdl:output name="verifyOrderRequirementResponse" message="tns:verifyOrderRequirementResponse">
+    </wsdl:output>
+      <wsdl:fault name="OrderingException" message="tns:OrderingException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="requestFulfillment">
+      <wsdl:input name="requestFulfillment" message="tns:requestFulfillment">
+    </wsdl:input>
+      <wsdl:output name="requestFulfillmentResponse" message="tns:requestFulfillmentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FulfillmentServiceServiceSoapBinding" type="tns:Fulfillment">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="cancelOrder">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="cancelOrder">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cancelOrderResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProposedOrderReplacement">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getProposedOrderReplacement">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProposedOrderReplacementResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResultAgumentatons">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getResultAgumentatons">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResultAgumentatonsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveResultByOrderId">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="retrieveResultByOrderId">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="retrieveResultByOrderIdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveResultByResultId">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="retrieveResultByResultId">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="retrieveResultByResultIdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrderRequirements">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="updateOrderRequirements">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateOrderRequirementsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verifyOrderRequirement">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="verifyOrderRequirement">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="verifyOrderRequirementResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="OrderingException">
+        <soap:fault name="OrderingException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="requestFulfillment">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="requestFulfillment">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="requestFulfillmentResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FulfillmentServiceService">
+    <wsdl:port name="FulfillmentPort" binding="tns:FulfillmentServiceServiceSoapBinding">
+      <soap:address location="http://localhost:9090/FulfillmentPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

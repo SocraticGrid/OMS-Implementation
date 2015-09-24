@@ -1,0 +1,66 @@
+/* 
+ * Copyright 2015 Cognitive Medical Systems, Inc (http://www.cognitivemedciine.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.socraticgrid.hl7.services.orders.internal.validators;
+
+import org.socraticgrid.hl7.services.orders.exceptions.MalformedOrderException;
+import org.socraticgrid.hl7.services.orders.exceptions.OrderingException;
+import org.socraticgrid.hl7.services.orders.internal.interfaces.ValidatorStepIFace;
+import org.socraticgrid.hl7.services.orders.model.Order;
+import org.socraticgrid.hl7.services.orders.model.OrderModel;
+
+public class CommonStructure extends BaseValidator implements ValidatorStepIFace
+{
+
+	@Override
+	public <T extends Order> boolean validateOrder(OrderModel<T> order)
+			throws OrderingException {
+		
+		boolean out = true;
+
+		
+		//Check Subject
+		if (order.getType().getSubjectdetails()==null)
+		{
+			throw new MalformedOrderException("Missing Subject Details");
+		}
+		else
+		{
+			if (order.getType().getSubjectdetails().getSubject()==null)
+			{
+				throw new MalformedOrderException("Missing Subject");
+			}
+			else
+			{
+				if (order.getType().getSubjectdetails().getSubject().getIdentity()==null)
+				{
+					throw new MalformedOrderException("Missing Subject Identity");
+				}
+				else
+				{
+					if(order.getType().getSubjectdetails().getSubject().getIdentity().getValue()==null)
+					{
+						throw new MalformedOrderException("Missing Subject Indentity Missing Value");
+					}
+				}
+			}
+		}
+		
+		
+		return out;
+	}
+
+	
+}

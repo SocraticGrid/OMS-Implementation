@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2015 Cognitive Medical Systems, Inc (http://www.cognitivemedciine.com).
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<context:annotation-config />
+	<import resource="classpath:beans/OrderDispatcher.xml" />
+	<import resource="classpath:beans/OrderManager.xml" />
+
+	<bean id="OrderManagementService" name="OrderManagementService"
+		class="org.socraticgrid.hl7.services.orders.OrderManagementService">
+	</bean>
+	<bean id="OrderManagementServiceImpl" name="OrderManagementServiceImpl"
+		class="org.socraticgrid.hl7.services.orders.service.impl.OrderManagementImpl">
+	</bean>
+
+
+	<bean id="ServiceRegistery" name="ServiceRegistery"
+		class="org.socraticgrid.hl7.services.orders.functional.ServiceRegistry">
+		<property name="serviceMap">
+			<map>
+				<entry key="test">
+					<bean
+						class="org.socraticgrid.hl7.services.orders.engines.fulfillment.DoNothingFulfillmentEngine" />
+				</entry>
+
+				<entry
+					key="org.socraticgrid.hl7.services.orders.model.types.order.LabOrder">
+					<bean
+						class="org.socraticgrid.hl7.services.orders.engines.fulfillment.DoNothingFulfillmentEngine" />
+				</entry>
+				<entry key="MedicationOrder">
+					<bean
+						class="org.socraticgrid.hl7.services.orders.engines.fulfillment.DoNothingFulfillmentEngine" />
+				</entry>
+				<entry
+					key="org.socraticgrid.hl7.services.orders.model.types.order.MedicationOrder">
+					<bean
+						class="org.socraticgrid.hl7.services.orders.engines.fulfillment.FulfillmentServiceEngine">
+						<property name="endpoint"
+							value="http://172.31.5.104:8972/csp/cpm/FulfillmentProxy.Service.FulfillmentPort.cls"></property>
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean
+		class="org.socraticgrid.hl7.services.orders.functional.MessageIdGenerator"
+		id="MessageIdGenerator" scope="singleton">
+		<property name="generator">
+			<bean
+				class="org.socraticgrid.hl7.services.orders.internal.idgenerators.TimeBasedIdGenerator" />
+		</property>
+	</bean>
+
+
+	<bean id="MainValidator"
+		class="org.socraticgrid.hl7.services.orders.functional.OrderValidator"
+		autowire-candidate="true" lazy-init="false" scope="singleton">
+		<property name="commonValidationSteps">
+			<list>
+				<bean
+					class="org.socraticgrid.hl7.services.orders.internal.validators.CommonStructure" />
+			</list>
+		</property>
+		<property name="typeSpecificValidators">
+			<map>
+				<entry key="SimpleMessage">
+					<list>
+						<bean
+							class="org.socraticgrid.hl7.services.orders.internal.validators.OrderCompleteness"></bean>
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="EventLogger" name="EventLogger"
+		class="org.socraticgrid.hl7.services.orders.functional.EventLogger">
+	</bean>
+
+
+
+</beans>
