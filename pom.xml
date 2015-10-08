@@ -28,6 +28,7 @@ limitations under the License.
     <modules>
         <module>order-fulfillment-engine-ri</module>        
         <module>order-fulfillment-library</module>        
+        <module>order-fulfillment-webservice</module>        
         <module>order-service-engine-ri</module>
         <module>order-service-library</module>
         <module>order-service-webservice</module>
@@ -104,6 +105,11 @@ limitations under the License.
             <dependency>
                 <groupId>org.socraticgrid.hl7</groupId>
                 <artifactId>oms-implementation-fulfillment-library</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.socraticgrid.hl7</groupId>
+                <artifactId>oms-implementation-fulfillment-engine-ri</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
