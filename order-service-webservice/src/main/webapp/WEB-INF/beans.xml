@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:annotation-config/>
+	
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
+	<!--  Data Source -->
+	<import resource="classpath:beans/DataSource.xml" />
+        
+	<!--  Service Implementation -->
+	<import resource="classpath:beans/OrderCatalogManagementService.xml" />
+	<import resource="classpath:beans/ServiceImplementationBeans.xml" />
+
+	<!--  Functional Beans -->
+	<import resource="classpath:beans/FunctionalBeans.xml" />
+	
+	
+	
+
+	<jaxws:endpoint id="ordermanagement"
+		implementor="org.socraticgrid.hl7.services.orders.OrderManagementService" address="/ordermanagement" />
+
+
+	
+	<jaxws:endpoint id="ordermonitoring"
+		implementor="org.socraticgrid.hl7.services.orders.OrderMonitoringService" address="/ordermonitoring" />
+	
+	<jaxws:endpoint id="orderworkflow"
+		implementor="org.socraticgrid.hl7.services.orders.OrderWorkflowService" address="/orderworkflow" />
+	
+	<jaxws:endpoint id="ordercatalogquery"
+		implementor="org.socraticgrid.hl7.services.orders.OrderCatalogQueryService" address="/ordercatalogquery" />
+	
+	<jaxws:endpoint id="fulfillmentupdate"
+		implementor="org.socraticgrid.hl7.services.orders.FulfillmentUpdateService" address="/fulfillmentupdate" />
+	
+	
+
+</beans>

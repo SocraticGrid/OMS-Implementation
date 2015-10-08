@@ -30,6 +30,7 @@ limitations under the License.
         <module>order-fulfillment-library</module>        
         <module>order-service-engine-ri</module>
         <module>order-service-library</module>
+        <module>order-service-webservice</module>
     </modules>  
   
     <properties>
@@ -58,7 +59,10 @@ limitations under the License.
 
         <!-- Hibernate -->
         <hibernate.version>3.6.10.Final</hibernate.version>
-        
+
+        <!-- Web -->
+        <jaxws.api.version>2.2.11</jaxws.api.version>        
+        <jaxws.version>2.2.10</jaxws.version>
 
         <!-- Logging -->
         <logback.version>1.0.13</logback.version>
@@ -100,6 +104,11 @@ limitations under the License.
             <dependency>
                 <groupId>org.socraticgrid.hl7</groupId>
                 <artifactId>oms-implementation-fulfillment-library</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.socraticgrid.hl7</groupId>
+                <artifactId>oms-implementation-service-engine-ri</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -195,7 +204,7 @@ limitations under the License.
                 <artifactId>commons-collections4</artifactId>
                 <version>4.0</version>
             </dependency>
-
+            
             <!-- CXF -->
             <dependency>
                 <groupId>org.apache.cxf</groupId>
@@ -224,6 +233,11 @@ limitations under the License.
                 <artifactId>exist-xmldb</artifactId>
                 <version>1.0</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.xmlrpc</groupId>
+                <artifactId>xmlrpc</artifactId>
+                <version>1.2-patched</version>
+            </dependency>
 
             <!-- MYBATIS -->
             <dependency>
@@ -238,6 +252,36 @@ limitations under the License.
                 <artifactId>javax.el-api</artifactId>
                 <version>2.2.4</version>
             </dependency>
+            <dependency>
+                <groupId>javax.xml.ws</groupId>
+                <artifactId>jaxws-api</artifactId>
+                <version>${jaxws.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jvnet.jax-ws-commons.spring</groupId>
+                <artifactId>jaxws-spring</artifactId>
+                <version>1.9</version>
+            </dependency>
+
+
+
+            <!-- Sun -->
+            <dependency>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-rt</artifactId>
+                <version>${jaxws.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>policy</artifactId>
+                <version>2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.stream.buffer</groupId>
+                <artifactId>streambuffer</artifactId>
+                <version>1.5.3</version>
+            </dependency>
+
             
             <!-- Hibernate -->
             <dependency>

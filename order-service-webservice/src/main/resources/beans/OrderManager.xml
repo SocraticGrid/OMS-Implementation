@@ -19,9 +19,13 @@ limitations under the License.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-	<bean id="OrderCatalogQueryServiceImpl"
-		name="OrderCatalogQueryServiceImpl"
-		class="org.socraticgrid.hl7.services.orders.service.impl.OrderCatalogQueryImpl">
+	<!-- Implementation of OrderManager -->
+	<bean id="MemoryOrderManager" name="OrderManager"
+		class="org.socraticgrid.hl7.services.orders.internal.MemoryOrderManager">
 	</bean>
+        
+        <!--bean id="PersistentOrderManager" name="PersistentOrderManager"
+		class="org.socraticgrid.hl7.services.orders.internal.PersistentOrderManager">
+	</bean-->
+	
 </beans>
